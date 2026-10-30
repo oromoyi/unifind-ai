@@ -1,0 +1,63 @@
+-- Reference data: permissions, roles, categories, campus locations (no personal data)
+USE unifind;
+
+INSERT IGNORE INTO permissions (code, description) VALUES ('lost.create', 'Create lost-item reports');
+INSERT IGNORE INTO permissions (code, description) VALUES ('found.create', 'Register found items');
+INSERT IGNORE INTO permissions (code, description) VALUES ('claims.create', 'Submit ownership claims');
+INSERT IGNORE INTO permissions (code, description) VALUES ('items.review', 'Approve/reject/archive item reports');
+INSERT IGNORE INTO permissions (code, description) VALUES ('claims.review', 'Review ownership claims');
+INSERT IGNORE INTO permissions (code, description) VALUES ('handovers.manage', 'Record physical handovers');
+INSERT IGNORE INTO permissions (code, description) VALUES ('users.manage', 'Manage users');
+INSERT IGNORE INTO permissions (code, description) VALUES ('roles.manage', 'Manage role permissions');
+INSERT IGNORE INTO permissions (code, description) VALUES ('settings.manage', 'Manage catalogue, matching and moderation settings');
+INSERT IGNORE INTO permissions (code, description) VALUES ('audit.view', 'View audit logs');
+INSERT IGNORE INTO permissions (code, description) VALUES ('analytics.view', 'View analytics and evaluation');
+INSERT IGNORE INTO permissions (code, description) VALUES ('reports.export', 'Export CSV/PDF reports');
+INSERT IGNORE INTO roles (name, description) VALUES ('student', 'Student / staff member who lost an item');
+INSERT IGNORE INTO roles (name, description) VALUES ('finder', 'Person who found an item');
+INSERT IGNORE INTO roles (name, description) VALUES ('officer', 'Security / lost-and-found officer');
+INSERT IGNORE INTO roles (name, description) VALUES ('admin', 'System administrator');
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='student' AND p.code='lost.create';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='student' AND p.code='claims.create';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='finder' AND p.code='found.create';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='officer' AND p.code='found.create';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='officer' AND p.code='items.review';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='officer' AND p.code='claims.review';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='officer' AND p.code='handovers.manage';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='officer' AND p.code='analytics.view';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='lost.create';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='found.create';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='claims.create';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='items.review';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='claims.review';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='handovers.manage';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='users.manage';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='roles.manage';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='settings.manage';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='audit.view';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='analytics.view';
+INSERT IGNORE INTO role_permissions (role_id, permission_id) SELECT r.id, p.id FROM roles r, permissions p WHERE r.name='admin' AND p.code='reports.export';
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Phones', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Laptops & Tablets', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Wallets & Purses', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Keys', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Bags & Backpacks', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('ID Cards & Documents', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Electronics & Accessories', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Clothing', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Books & Stationery', 1);
+INSERT IGNORE INTO item_categories (name, is_active) VALUES ('Other', 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Main Library', 'Central', 0, 0, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Student Cafeteria', 'Central', 120, 60, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Engineering Building', 'North', 50, 400, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Science Block', 'North', 150, 450, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Dormitory Block A', 'East', 700, 100, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Dormitory Block B', 'East', 760, 160, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Sports Field', 'South', 300, -500, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Main Gate', 'West', -600, 0, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Lecture Hall 1', 'Central', -40, 80, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Student Clinic', 'East', 500, -100, 1);
+INSERT IGNORE INTO campus_locations (name, zone, x, y, is_active) VALUES ('Administration Building', 'Central', -150, -120, 1);
+
+-- Demo users, lost/found items, claims and handovers are created by `python backend/seed.py`
+-- (it calls the real API so password hashes, audit logs, matches and notifications are genuine).

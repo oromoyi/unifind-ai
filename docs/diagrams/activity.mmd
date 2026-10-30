@@ -1,0 +1,22 @@
+flowchart TD
+  A([Student reports lost item]) --> B{Duplicate of own report?}
+  B -- yes --> B1[Warn; user confirms or edits] --> C
+  B -- no --> C[Save report, run matching]
+  C --> D{Finder/officer registers found item}
+  D --> E[Officer approves finder item] --> F[Matching runs against open lost reports]
+  F --> G{Score >= notify threshold?}
+  G -- yes --> H[In-app notification to owner]
+  G -- no --> I[Stored if >= min score, no alert]
+  H --> J[Student opens item and submits claim + answer]
+  I --> J
+  J --> K{Attempt limit reached?}
+  K -- yes --> K1[Blocked: visit office] --> Z([End])
+  K -- no --> L[Hash answer, compare, flag if suspicious]
+  L --> M[Officer reviews evidence]
+  M --> N{Verified?}
+  N -- no --> O[Reject with reason, notify] --> Z
+  N -- yes --> P[Approve in one transaction: item claimed, handover code created]
+  P --> Q[Student shows ID + code at office]
+  Q --> R{Code correct and ID checked?}
+  R -- no --> Q
+  R -- yes --> S[Item returned, receipt PDF, feedback] --> Z

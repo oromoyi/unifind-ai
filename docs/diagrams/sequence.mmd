@@ -1,0 +1,22 @@
+sequenceDiagram
+  actor St as Student
+  actor Officer
+  participant UI as React UI
+  participant API as Flask API
+  participant DB as MySQL
+  St->>UI: Submit claim (description, answer)
+  UI->>API: POST /found/{id}/claims
+  API->>DB: INSERT claim, claim_verification(hash), audit_log
+  API-->>UI: 201 (no match result revealed)
+  API->>DB: INSERT notifications (staff, finder)
+  Officer->>UI: Approve with reason
+  UI->>API: POST /claims/{id}/approve
+  API->>DB: BEGIN, SELECT ... FOR UPDATE (claim, item)
+  API->>DB: UPDATE claim, item=claimed, reject competing claims
+  API->>DB: INSERT handover(code), notifications, audit_log
+  API->>DB: COMMIT
+  API-->>UI: 200
+  St->>Officer: Shows ID and handover code
+  Officer->>API: POST /handovers/{id}/complete (code, id_verified)
+  API->>DB: BEGIN, verify code, item=returned, lost=recovered, COMMIT
+  API-->>Officer: 200 + receipt available

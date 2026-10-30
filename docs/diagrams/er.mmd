@@ -1,0 +1,20 @@
+erDiagram
+  roles ||--o{ users : has
+  roles }o--o{ permissions : role_permissions
+  users ||--o{ lost_reports : files
+  users ||--o{ found_items : registers
+  users ||--o{ claims : submits
+  users ||--o{ notifications : receives
+  users ||--o{ audit_logs : performs
+  item_categories ||--o{ lost_reports : classifies
+  item_categories ||--o{ found_items : classifies
+  campus_locations ||--o{ lost_reports : where
+  campus_locations ||--o{ found_items : where
+  found_items ||--o{ claims : claimed_by
+  claims ||--o{ claim_verifications : checks
+  claims ||--o| handovers : results_in
+  handovers ||--o| feedback : rated_by
+  lost_reports ||--o{ matching_results : scored
+  found_items ||--o{ matching_results : scored
+  found_items ||--o{ item_images : photos
+  lost_reports ||--o{ item_images : photos

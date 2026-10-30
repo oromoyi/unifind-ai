@@ -1,0 +1,17 @@
+flowchart LR
+  subgraph Client["Browser (React + Vite + Tailwind)"]
+    UI["Pages & components"] --> APIc["fetch API client (JWT)"]
+  end
+  APIc -->|HTTPS JSON / multipart| Flask
+  subgraph Server["Flask REST API"]
+    Flask["Blueprints: auth, items, claims, notifications, admin, public"]
+    Sec["security.py: JWT, RBAC, rate limit, hashing"]
+    Match["matching.py: TF-IDF + weighted signals"]
+    Util["utils.py: audit, notify, upload validation"]
+    Flask --> Sec
+    Flask --> Match
+    Flask --> Util
+  end
+  Flask -->|SQLAlchemy ORM, transactions| DB[("MySQL 8")]
+  Util --> FS[["Image storage: local folder / S3 option"]]
+  Util -.optional.-> SMTP["SMTP e-mail"]

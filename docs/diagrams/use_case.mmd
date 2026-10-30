@@ -1,0 +1,18 @@
+flowchart LR
+  S([Student]) --- UC1(Report lost item)
+  S --- UC2(Browse / search found items)
+  S --- UC3(View suggested matches)
+  S --- UC4(Submit ownership claim)
+  S --- UC5(Track claims, notifications)
+  S --- UC11(Give recovery feedback)
+  F([Finder]) --- UC6(Register found item)
+  F --- UC7(Track item status)
+  O([Officer]) --- UC6
+  O --- UC8(Review and verify claims)
+  O --- UC9(Record handover and receipt)
+  O --- UC12(Moderate reports)
+  A([Administrator]) --- UC10(Manage users and permissions)
+  A --- UC13(Configure categories, locations, matching)
+  A --- UC14(View analytics, audit log, exports)
+  A --- UC8
+  A --- UC12

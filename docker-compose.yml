@@ -1,0 +1,37 @@
+# Optional containerised run:  docker compose up --build
+# (Written for convenience; the primary documented path is the local Windows/VS Code setup in README.md.)
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: unifind
+      MYSQL_USER: unifind
+      MYSQL_PASSWORD: ${DB_PASSWORD:-change-me-db}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change-me-root}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes: [dbdata:/var/lib/mysql]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${DB_ROOT_PASSWORD:-change-me-root}"]
+      interval: 5s
+      retries: 20
+  backend:
+    build: ./backend
+    environment:
+      FLASK_ENV: production
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in a .env file next to docker-compose.yml}
+      DB_HOST: db
+      DB_USER: unifind
+      DB_PASSWORD: ${DB_PASSWORD:-change-me-db}
+      DB_NAME: unifind
+      CORS_ORIGINS: http://localhost:8080
+      SEED_ARGS: ${SEED_ARGS:---bootstrap-only}   # use "" (empty) for demo data
+    volumes: [uploads:/app/uploads]
+    depends_on:
+      db: { condition: service_healthy }
+  frontend:
+    build: ./frontend
+    ports: ["8080:80"]
+    depends_on: [backend]
+volumes:
+  dbdata:
+  uploads:

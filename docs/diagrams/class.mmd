@@ -1,0 +1,29 @@
+classDiagram
+  class User { id; full_name; email; password_hash; student_id; is_active; locked_until }
+  class Role { id; name }
+  class Permission { id; code }
+  class LostReport { id; title; description; color; brand; lost_date; status }
+  class FoundItem { id; title; public_description; private_details; verification_answer_hash; found_date; status }
+  class ItemImage { id; filename }
+  class Claim { id; description; status; auto_check_passed; suspicious; review_reason }
+  class ClaimVerification { id; question; submitted_answer_hash; matched }
+  class Handover { id; reference_code; status; id_verified; completed_at }
+  class MatchingResult { id; score; breakdown; explanation }
+  class Notification { id; type; message; is_read }
+  class AuditLog { id; action; entity_type; entity_id; details; ip_address }
+  class Feedback { id; rating; comment }
+  User "*" --> "1" Role
+  Role "*" -- "*" Permission
+  User "1" --> "*" LostReport : reports
+  User "1" --> "*" FoundItem : registers
+  LostReport "1" --> "*" ItemImage
+  FoundItem "1" --> "*" ItemImage
+  FoundItem "1" --> "*" Claim
+  User "1" --> "*" Claim : claimant
+  Claim "1" --> "*" ClaimVerification
+  Claim "1" --> "0..1" Handover
+  Handover "1" --> "0..1" Feedback
+  LostReport "1" --> "*" MatchingResult
+  FoundItem "1" --> "*" MatchingResult
+  User "1" --> "*" Notification
+  User "1" --> "*" AuditLog
